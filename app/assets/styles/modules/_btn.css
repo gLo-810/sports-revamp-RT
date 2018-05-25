@@ -1,0 +1,32 @@
+.btn {
+  border-radius: 4px;
+  border: none;
+  font-size: 1.2rem;
+  color: white;
+  background-color: #09bcd3;
+  padding: 20px;
+  box-shadow: 0 5px;
+  text-align: center;
+  flex-basis: 50%;
+  box-sizing: border-box;
+
+  &:active {
+    box-shadow: 0 2px;
+    transform: translateY(4px);
+  }
+
+}
+
+@media only screen and (max-width: 1131px) {
+  .btn {
+    padding: 10px;
+  }
+}
+
+@media only screen and (max-width: 892px) {
+  .btn {
+    padding: 4px;
+    width: 80px;
+    flex-basis: 3%;
+  }
+}

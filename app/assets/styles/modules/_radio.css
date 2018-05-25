@@ -1,0 +1,9 @@
+.radio {
+  display: inline-block;
+}
+
+@media only screen and (max-width: 592px) {
+  .radio {
+    display: none;
+  }
+}

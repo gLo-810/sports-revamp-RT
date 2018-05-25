@@ -1,0 +1,56 @@
+/*.form-container {
+  display: flex;
+  margin-top: 1px;
+
+  & form {
+    margin: auto;
+    font-size: 1.8rem;
+  }
+}
+
+
+
+@media only screen and (max-width: 1131px) {
+  .form-container form {
+    font-size: 1.5rem;
+  }
+}
+
+@media only screen and (max-width: 892px) {
+  .form-container form {
+    font-size: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: 592px) {
+  .form-container form input {
+    display: none;
+  }
+}*/
+
+
+.form-container{
+  display: flex;
+  margin-top: 1px;
+
+
+  & form {
+    margin: auto;
+    font-size: 1.8rem;
+
+    @include bp-large {
+      font-size: 1.5rem;
+    }
+
+    @include bp-medium {
+      font-size: 1.2rem;
+    }
+
+    & input {
+      @include bp-small {
+       //gets squished here.
+        display: none;
+     }
+   }
+  }
+ }

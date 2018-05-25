@@ -1,0 +1,15 @@
+.list-container {
+  display: flex;
+  width: 163px;
+  height: 617px;
+  margin-left: 15px;
+
+  @include bp-large {
+    margin-left: 6px;
+  }
+
+   @include bp-small {
+    //list box gets squished here.
+     display: none;
+  }
+}

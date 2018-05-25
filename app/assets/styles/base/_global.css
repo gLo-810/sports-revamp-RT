@@ -1,0 +1,11 @@
+body {
+ background-color: $mainMatte;
+ font-family: sans-serif;
+ color: $mainTeal;
+
+}
+
+h1 {
+ margin: 7px 10px 2px 0px;
+
+}

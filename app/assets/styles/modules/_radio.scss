@@ -1,0 +1,9 @@
+@import '../base/_mixins.scss';
+
+.radio {
+  display: inline-block;
+
+  @include bp-small {
+    display: none;
+  }
+}

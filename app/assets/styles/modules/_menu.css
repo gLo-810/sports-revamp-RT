@@ -1,0 +1,50 @@
+header {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  width: 300px;
+
+  & h1 {
+    margin: 8px 5px;
+  }
+}
+
+.nav {
+  // border-bottom: 1px solid #eaeaeb;
+
+}
+
+label {
+  font-size: 26px;
+  line-height: 39px;
+  display: none;
+}
+
+.menu {
+  border: 1px solid blue;
+  display: none;
+}
+
+#toggle {
+  display: none;
+}
+
+@include bp-small {
+    label {
+      display: block;
+      cursor: pointer;
+      height: 40px;
+      margin-top: 10px;
+      margin-left: 4px;
+    }
+
+    .menu {
+      display: none;
+
+    }
+
+    #toggle:checked + .menu {
+      display: block;
+      color: green;
+    }
+}

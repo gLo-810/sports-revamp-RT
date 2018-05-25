@@ -1,0 +1,4 @@
+$mainMatte: #414141;
+
+/*this teal color is equivalent to lighten function in SASS and is postCSS specific*/
+$mainTeal: color(#09bcd3 tint(15%));

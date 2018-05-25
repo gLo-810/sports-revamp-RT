@@ -1,0 +1,15 @@
+.pic-grid-container {
+  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border: 5px solid;
+  border-color: $mainTeal;
+  border-radius: 15px;
+  width: 1300px;
+
+  @include bp-medium  {
+  padding: 10px;
+  }
+
+}
