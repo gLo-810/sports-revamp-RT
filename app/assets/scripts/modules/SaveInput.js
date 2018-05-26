@@ -1,5 +1,6 @@
 import $ from 'jquery';
 
+
 class SaveInput {
 
   // dom selection usually and firing events when a page loads.

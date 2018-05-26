@@ -1,6 +1,7 @@
 const gulp = require('gulp'),
 watch = require('gulp-watch'),
-browserSync = require('browser-sync').create();
+browserSync = require('browser-sync').create(),
+gls = require('gulp-live-server');
 
 
 gulp.task('watch', function() {
