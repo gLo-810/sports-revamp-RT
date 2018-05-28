@@ -14330,18 +14330,20 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 // make connection
 var socket = _socket2.default.connect('localhost:3000');
-console.log(socket.connected);
-socket.on('connection', function () {
-  console.log('hi');
-});
+// console.log(socket.connected);
+// socket.on('connection', function(){
+//     console.log('hi');
+// });
+//
+//
+// socket.on('connect_error', function(){
+//     console.log('fail');
+// });
+//
+// socket.on('disconnect', function(){
+// console.log('fail');
+// });
 
-socket.on('connect_error', function () {
-  console.log('fail');
-});
-
-socket.on('disconnect', function () {
-  console.log('fail');
-});
 
 var Display = function (_SaveInput) {
   _inherits(Display, _SaveInput);
@@ -14387,38 +14389,51 @@ var Display = function (_SaveInput) {
   }, {
     key: 'displayEls',
     value: function displayEls() {
+      var that = this;
+      var img = './assets/images/baseball/team0.jpg';
+      var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
+      var $newImg = (0, _jquery2.default)('<img>');
 
       // EMIT
       socket.emit('test', {
-        names: this.names
+        image: img
       });
 
       // listen
       socket.on('test', function (data) {
-        // clear content to start fresh
-        var that = this;
-        this.pGrid.html("");
-        this.names.forEach(function (name, i) {
 
-          var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
-          var $newImg = (0, _jquery2.default)('<img>');
-          var $newName = (0, _jquery2.default)('<p>');
+        var foo = data.image.toString();
 
-          // append to DOM
-          $newImg.appendTo($picContainer);
-          $newName.text(name);
-          $newName.appendTo($picContainer);
-
-          if (baseball.checked) {
-            $newImg.attr('src', "./assets/images/baseball/team" + that.numbers[i] + ".jpg");
-          } else if (football.checked) {
-            $newImg.attr('src', "./assets/images/football/team" + that.numbers[i] + ".gif");
-          }
-          that.pGrid.append($picContainer);
-        });
+        $newImg.attr('src', foo);
+        console.log(data);
+        console.log(foo);
+        console.log('NEW IMG ' + $newImg);
+        $newImg.appendTo($picContainer);
+        that.pGrid.append($picContainer);
       });
-    }
 
+      // // clear content to start fresh
+      // let that = this;
+      // this.pGrid.html("");
+      // this.names.forEach(function(name, i) {
+      //
+      // let $picContainer = $('<div class="picture-frame"></div>');
+      // let  $newImg = $('<img>');
+      // let  $newName = $('<p>');
+      //
+      // // append to DOM
+      //   $newImg.appendTo($picContainer);
+      //   $newName.text(name);
+      //   $newName.appendTo($picContainer);
+      //
+      //   if (baseball.checked) {
+      //        $newImg.attr('src', "./assets/images/baseball/team" + that.numbers[i] + ".jpg");
+      //      } else if (football.checked) {
+      //        $newImg.attr('src', "./assets/images/football/team" + that.numbers[i] + ".gif");
+      //    }
+      //   that.pGrid.append($picContainer);
+      // });
+    }
     // shuffle arrays
 
   }, {

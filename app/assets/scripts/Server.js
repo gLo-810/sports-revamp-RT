@@ -21,8 +21,8 @@ io.on('connection', (socket) => {
     // events
 
     socket.on('test', function(data){
-        console.log(data);
-        // io.sockets.emit('add', data);
+        console.log('SERVER ' + data.image);
+        io.sockets.emit('test', data);
     });
 
 });
