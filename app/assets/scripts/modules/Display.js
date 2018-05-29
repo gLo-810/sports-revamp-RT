@@ -24,6 +24,7 @@ class Display extends SaveInput {
   constructor(names, numbers){
     super(names, numbers);
 
+    this.mainContainer = $('.main-container');
     this.pGrid = $('.pic-grid-container');
     this.baseball = $('#baseball');
     this.football = $('#football');
@@ -53,27 +54,39 @@ class Display extends SaveInput {
   //display images with names
   displayEls() {
     let that = this;
-    let img = './assets/images/baseball/team0.jpg';
+    let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
     let $picContainer = $('<div class="picture-frame"></div>');
     let  $newImg = $('<img>');
 
     // EMIT
-    socket.emit('test', {
+    socket.emit('client-image', {
       image: img
     });
 
     // listen
-    socket.on('test', function(data) {
+    socket.on('client-image', function(data) {
 
         let foo = data.image.toString();
 
         $newImg.attr('src', foo);
         console.log(data);
         console.log(foo);
-        console.log('NEW IMG ' + $newImg);
         $newImg.appendTo($picContainer);
         that.pGrid.append($picContainer);
+        let htmlClone = that.pGrid.clone();
+        let stringClone = htmlClone.html();
+        console.log('after append clone ' + stringClone);
 
+        // clone pGrid for new clients
+        socket.emit('new-client-clone', {
+          clone: stringClone
+        });
+
+    });
+
+    socket.on('new-client-clone', (data) => {
+      console.log('LISTENING FOR CLONE ' + JSON.stringify(data));
+      that.mainContainer.append(data.clone);
     });
 
     // // clear content to start fresh

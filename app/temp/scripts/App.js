@@ -14354,6 +14354,7 @@ var Display = function (_SaveInput) {
 
     var _this = _possibleConstructorReturn(this, (Display.__proto__ || Object.getPrototypeOf(Display)).call(this, names, numbers));
 
+    _this.mainContainer = (0, _jquery2.default)('.main-container');
     _this.pGrid = (0, _jquery2.default)('.pic-grid-container');
     _this.baseball = (0, _jquery2.default)('#baseball');
     _this.football = (0, _jquery2.default)('#football');
@@ -14390,26 +14391,38 @@ var Display = function (_SaveInput) {
     key: 'displayEls',
     value: function displayEls() {
       var that = this;
-      var img = './assets/images/baseball/team0.jpg';
+      var img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
       var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
       var $newImg = (0, _jquery2.default)('<img>');
 
       // EMIT
-      socket.emit('test', {
+      socket.emit('client-image', {
         image: img
       });
 
       // listen
-      socket.on('test', function (data) {
+      socket.on('client-image', function (data) {
 
         var foo = data.image.toString();
 
         $newImg.attr('src', foo);
         console.log(data);
         console.log(foo);
-        console.log('NEW IMG ' + $newImg);
         $newImg.appendTo($picContainer);
         that.pGrid.append($picContainer);
+        var htmlClone = that.pGrid.clone();
+        var stringClone = htmlClone.html();
+        console.log('after append clone ' + stringClone);
+
+        // clone pGrid for new clients
+        socket.emit('new-client-clone', {
+          clone: stringClone
+        });
+      });
+
+      socket.on('new-client-clone', function (data) {
+        console.log('LISTENING FOR CLONE ' + JSON.stringify(data));
+        that.mainContainer.append(data.clone);
       });
 
       // // clear content to start fresh

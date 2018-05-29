@@ -18,15 +18,21 @@ const io = new socketIO(server);
 io.on('connection', (socket) => {
 
     console.log('made connection!!!');
-    // events
 
-    socket.on('test', function(data){
+    // events
+    socket.on('client-image', function(data){
         console.log('SERVER ' + data.image);
-        io.sockets.emit('test', data);
+        io.sockets.emit('client-image', data);
+    });
+
+    socket.on('new-client-clone', function(data){
+      console.log(data);
+      io.sockets.emit('new-client-clone', data);
     });
 
 });
 
+// errors
 io.on('connect_error', function(){
     console.log('fail');
 });
