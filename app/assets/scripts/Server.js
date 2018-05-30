@@ -1,7 +1,7 @@
 const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
-
+let jqueryImage;
 
 // app set up
 const app = express();
@@ -15,7 +15,9 @@ app.use(express.static('app'));
 // socket setup & pass SERVER
 const io = new socketIO(server);
 
+// on client connect
 io.on('connection', (socket) => {
+  socket.emit('append', );
 
     console.log('made connection!!!');
 
@@ -26,11 +28,16 @@ io.on('connection', (socket) => {
     });
 
     socket.on('new-client-clone', function(data){
-      console.log(data);
-      io.sockets.emit('new-client-clone', data);
+      jqueryImage = data.clone;
+      console.log('jqueryImage ' + JSON.stringify(jqueryImage));
+      socket.emit('append', jqueryImage);
     });
 
+
+
 });
+
+
 
 // errors
 io.on('connect_error', function(){

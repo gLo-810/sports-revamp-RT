@@ -53,18 +53,31 @@ class Display extends SaveInput {
 
   //display images with names
   displayEls() {
-    let that = this;
+    // let that = this;
     let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
     let $picContainer = $('<div class="picture-frame"></div>');
     let  $newImg = $('<img>');
 
+    // clone pic-grid-container
+    let htmlClone = this.pGrid.clone();
+    let stringClone = htmlClone.html();
+
     // EMIT
+
+    //send image url
     socket.emit('client-image', {
       image: img
     });
 
-    // listen
-    socket.on('client-image', function(data) {
+    // send dom clone to server
+    socket.emit('new-client-clone', {
+      clone: stringClone
+    });
+
+    // LISTEN
+
+    // append image in real time
+    socket.on('client-image', (data) => {
 
         let foo = data.image.toString();
 
@@ -72,21 +85,14 @@ class Display extends SaveInput {
         console.log(data);
         console.log(foo);
         $newImg.appendTo($picContainer);
-        that.pGrid.append($picContainer);
-        let htmlClone = that.pGrid.clone();
-        let stringClone = htmlClone.html();
+        this.pGrid.append($picContainer);
+
         console.log('after append clone ' + stringClone);
-
-        // clone pGrid for new clients
-        socket.emit('new-client-clone', {
-          clone: stringClone
-        });
-
     });
 
-    socket.on('new-client-clone', (data) => {
+    socket.on('append',  (data) => {
       console.log('LISTENING FOR CLONE ' + JSON.stringify(data));
-      that.mainContainer.append(data.clone);
+      this.mainContainer.append(data.html);
     });
 
     // // clear content to start fresh
