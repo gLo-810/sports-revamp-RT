@@ -1,7 +1,7 @@
 const express = require('express');
 const socketIO = require('socket.io');
 const http = require('http');
-let jqueryImage;
+
 
 // app set up
 const app = express();
@@ -15,11 +15,15 @@ app.use(express.static('app'));
 // socket setup & pass SERVER
 const io = new socketIO(server);
 
+let jqueryImage;
+
 // on client connect
 io.on('connection', (socket) => {
-  socket.emit('append', );
 
-    console.log('made connection!!!');
+  console.log('client has entered...');
+
+  socket.emit('new-client-append', jqueryImage);
+
 
     // events
     socket.on('client-image', function(data){
@@ -27,21 +31,23 @@ io.on('connection', (socket) => {
         io.sockets.emit('client-image', data);
     });
 
-    socket.on('new-client-clone', function(data){
-      jqueryImage = data.clone;
-      console.log('jqueryImage ' + JSON.stringify(jqueryImage));
-      socket.emit('append', jqueryImage);
+
+    socket.on('new-client-append', function(data){
+            jqueryImage = data.clone;
+            console.log('jqueryImage ' + JSON.stringify(jqueryImage));
+      });
+
+
+
+    // errors
+    io.on('error', function (err) {
+        console.log(err);
     });
 
+    io.on('connect_error', function(){
+        console.log('fail');
+    });
 
-
-});
-
-
-
-// errors
-io.on('connect_error', function(){
-    console.log('fail');
 });
 
 

@@ -14330,20 +14330,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 // make connection
 var socket = _socket2.default.connect('localhost:3000');
-// console.log(socket.connected);
-// socket.on('connection', function(){
-//     console.log('hi');
-// });
-//
-//
-// socket.on('connect_error', function(){
-//     console.log('fail');
-// });
-//
-// socket.on('disconnect', function(){
-// console.log('fail');
-// });
 
+socket.on('new-client-append', function (data) {
+    console.log('NEW CLIENT ENTERED');
+    console.log('on new-client-clone ' + JSON.stringify(data));
+
+    undefined.mainContainer.append(data);
+});
+
+socket.on('connect_error', function () {
+    console.log('fail');
+});
 
 var Display = function (_SaveInput) {
     _inherits(Display, _SaveInput);
@@ -14409,7 +14406,7 @@ var Display = function (_SaveInput) {
             });
 
             // send dom clone to server
-            socket.emit('new-client-clone', {
+            socket.emit('new-client-append', {
                 clone: stringClone
             });
 
@@ -14421,17 +14418,13 @@ var Display = function (_SaveInput) {
                 var foo = data.image.toString();
 
                 $newImg.attr('src', foo);
-                console.log(data);
-                console.log(foo);
+                // console.log(data);
+                // console.log(foo);
                 $newImg.appendTo($picContainer);
                 _this3.pGrid.append($picContainer);
 
-                console.log('after append clone ' + stringClone);
-            });
-
-            socket.on('append', function (data) {
-                console.log('LISTENING FOR CLONE ' + JSON.stringify(data));
-                _this3.mainContainer.append(data.html);
+                // console.log('html clone ' + JSON.stringify(htmlClone));
+                // console.log('string clone ' + stringClone);
             });
 
             // // clear content to start fresh

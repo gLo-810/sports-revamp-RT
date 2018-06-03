@@ -2,21 +2,22 @@ import $ from 'jquery';
 import SaveInput from './SaveInput';
 import io from 'socket.io-client';
 
+
 // make connection
 const socket = io.connect('localhost:3000');
-// console.log(socket.connected);
-// socket.on('connection', function(){
-//     console.log('hi');
-// });
-//
-//
-// socket.on('connect_error', function(){
-//     console.log('fail');
-// });
-//
-// socket.on('disconnect', function(){
-// console.log('fail');
-// });
+
+
+socket.on('new-client-append', (data) => {
+  console.log('NEW CLIENT ENTERED');
+  console.log('on new-client-clone ' + JSON.stringify(data));
+
+    this.mainContainer.append(data);
+
+});
+
+socket.on('connect_error', function(){
+    console.log('fail');
+});
 
 
 class Display extends SaveInput {
@@ -70,7 +71,7 @@ class Display extends SaveInput {
     });
 
     // send dom clone to server
-    socket.emit('new-client-clone', {
+    socket.emit('new-client-append', {
       clone: stringClone
     });
 
@@ -82,18 +83,19 @@ class Display extends SaveInput {
         let foo = data.image.toString();
 
         $newImg.attr('src', foo);
-        console.log(data);
-        console.log(foo);
+        // console.log(data);
+        // console.log(foo);
         $newImg.appendTo($picContainer);
         this.pGrid.append($picContainer);
 
-        console.log('after append clone ' + stringClone);
+        // console.log('html clone ' + JSON.stringify(htmlClone));
+        // console.log('string clone ' + stringClone);
     });
 
-    socket.on('append',  (data) => {
-      console.log('LISTENING FOR CLONE ' + JSON.stringify(data));
-      this.mainContainer.append(data.html);
-    });
+
+    
+
+
 
     // // clear content to start fresh
     // let that = this;
