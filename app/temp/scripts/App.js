@@ -14335,7 +14335,7 @@ socket.on('new-client-append', function (data) {
     console.log('NEW CLIENT ENTERED');
     console.log('on new-client-clone ' + JSON.stringify(data));
 
-    undefined.mainContainer.append(data);
+    display.mainContainer.append(data);
 });
 
 socket.on('connect_error', function () {

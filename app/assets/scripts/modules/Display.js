@@ -11,7 +11,7 @@ socket.on('new-client-append', (data) => {
   console.log('NEW CLIENT ENTERED');
   console.log('on new-client-clone ' + JSON.stringify(data));
 
-    this.mainContainer.append(data);
+    display.mainContainer.append(data);
 
 });
 
@@ -92,11 +92,6 @@ class Display extends SaveInput {
         // console.log('string clone ' + stringClone);
     });
 
-
-    
-
-
-
     // // clear content to start fresh
     // let that = this;
     // this.pGrid.html("");
@@ -127,5 +122,7 @@ class Display extends SaveInput {
     }
   }
 }
+
+
 
 export default Display;
