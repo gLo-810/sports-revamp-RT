@@ -14331,17 +14331,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // make connection
 var socket = _socket2.default.connect('localhost:3000');
 
-socket.on('new-client-append', function (data) {
-    console.log('NEW CLIENT ENTERED');
-    console.log('on new-client-clone ' + JSON.stringify(data));
-
-    display.mainContainer.append(data);
-});
-
-socket.on('connect_error', function () {
-    console.log('fail');
-});
-
 var Display = function (_SaveInput) {
     _inherits(Display, _SaveInput);
 
@@ -14358,8 +14347,19 @@ var Display = function (_SaveInput) {
         _this.display = (0, _jquery2.default)('#btn-display');
         _this.reset = (0, _jquery2.default)('#btn-reset');
         _this.random = (0, _jquery2.default)('#random');
-
         _this.buttons();
+
+        socket.on('new-client-append', function (data) {
+            console.log('NEW CLIENT ENTERED');
+            console.log('new-client-append data ' + JSON.stringify(data));
+
+            _this.mainContainer.append(data);
+        });
+
+        socket.on('connect_error', function () {
+            console.log('fail');
+        });
+
         return _this;
     }
 
@@ -14406,9 +14406,11 @@ var Display = function (_SaveInput) {
             });
 
             // send dom clone to server
-            socket.emit('new-client-append', {
-                clone: stringClone
-            });
+            if (stringClone != 'null') {
+                socket.emit('new-client-append', {
+                    clone: stringClone
+                });
+            }
 
             // LISTEN
 

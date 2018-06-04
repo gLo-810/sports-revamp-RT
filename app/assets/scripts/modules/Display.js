@@ -7,18 +7,6 @@ import io from 'socket.io-client';
 const socket = io.connect('localhost:3000');
 
 
-socket.on('new-client-append', (data) => {
-  console.log('NEW CLIENT ENTERED');
-  console.log('on new-client-clone ' + JSON.stringify(data));
-
-    display.mainContainer.append(data);
-
-});
-
-socket.on('connect_error', function(){
-    console.log('fail');
-});
-
 
 class Display extends SaveInput {
   // dom selection usually and firing events when a page loads.
@@ -32,8 +20,21 @@ class Display extends SaveInput {
     this.display = $('#btn-display');
     this.reset = $('#btn-reset');
     this.random = $('#random');
-
     this.buttons();
+
+
+    socket.on('new-client-append', (data) => {
+      console.log('NEW CLIENT ENTERED');
+      console.log('new-client-append data ' + JSON.stringify(data));
+
+        this.mainContainer.append(data);
+    });
+
+    socket.on('connect_error', function(){
+        console.log('fail');
+    });
+
+
   }
 
   buttons (){
@@ -71,9 +72,12 @@ class Display extends SaveInput {
     });
 
     // send dom clone to server
-    socket.emit('new-client-append', {
-      clone: stringClone
-    });
+    if (stringClone != 'null') {
+      socket.emit('new-client-append', {
+        clone: stringClone
+      });
+    }
+
 
     // LISTEN
 
