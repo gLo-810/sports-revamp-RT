@@ -27,7 +27,7 @@ class Display extends SaveInput {
       console.log('NEW CLIENT ENTERED');
       console.log('new-client-append data ' + JSON.stringify(data));
 
-        this.mainContainer.append(data);
+        this.pGrid.append(data);
     });
 
     socket.on('connect_error', function(){

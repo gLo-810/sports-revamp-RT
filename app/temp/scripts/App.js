@@ -14353,7 +14353,7 @@ var Display = function (_SaveInput) {
             console.log('NEW CLIENT ENTERED');
             console.log('new-client-append data ' + JSON.stringify(data));
 
-            _this.mainContainer.append(data);
+            _this.pGrid.append(data);
         });
 
         socket.on('connect_error', function () {
