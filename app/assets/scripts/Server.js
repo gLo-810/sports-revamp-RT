@@ -26,9 +26,9 @@ io.on('connection', (socket) => {
 
 
     // events
-    socket.on('client-image', function(data){
+    socket.on('client-image', (data) => {
         console.log('SERVER ' + data.image);
-        io.sockets.emit('client-image', data);
+        socket.broadcast.emit('client-image', data);
     });
 
 
@@ -40,13 +40,13 @@ io.on('connection', (socket) => {
 
 
     // errors
-    io.on('error', function (err) {
-        console.log(err);
-    });
+    // io.on('error', function (err) {
+    //     console.log(err);
+    // });
 
-    io.on('connect_error', function(){
-        console.log('fail');
-    });
+    // io.on('connect_error', function(){
+    //     console.log('fail');
+    // });
 
 });
 

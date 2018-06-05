@@ -14387,22 +14387,38 @@ var Display = function (_SaveInput) {
     }, {
         key: 'displayEls',
         value: function displayEls() {
-            var _this3 = this;
-
-            // let that = this;
-            var img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
-            var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
-            var $newImg = (0, _jquery2.default)('<img>');
-
+            var that = this;
+            // let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
             // clone pic-grid-container
-            var htmlClone = this.pGrid.clone();
+
+            this.names.forEach(function (name, i) {
+
+                var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
+                var $newImg = (0, _jquery2.default)('<img>');
+                var $newName = (0, _jquery2.default)('<p>');
+
+                // append to DOM
+                $newImg.appendTo($picContainer);
+                $newName.text(name);
+                $newName.appendTo($picContainer);
+
+                if (baseball.checked) {
+                    $newImg.attr('src', "./assets/images/baseball/team" + that.numbers[i] + ".jpg");
+                } else if (football.checked) {
+                    $newImg.attr('src', "./assets/images/football/team" + that.numbers[i] + ".gif");
+                }
+                that.pGrid.append($picContainer);
+            });
+
+            var htmlClone = that.pGrid.clone();
             var stringClone = htmlClone.html();
+            console.log(stringClone);
 
             // EMIT
 
             //send image url
             socket.emit('client-image', {
-                image: img
+                image: stringClone
             });
 
             // send dom clone to server
@@ -14418,12 +14434,12 @@ var Display = function (_SaveInput) {
             socket.on('client-image', function (data) {
 
                 var foo = data.image.toString();
-
-                $newImg.attr('src', foo);
-                // console.log(data);
-                // console.log(foo);
-                $newImg.appendTo($picContainer);
-                _this3.pGrid.append($picContainer);
+                //
+                // $newImg.attr('src', foo);
+                // // console.log(data);
+                console.log('FOO ', foo);
+                // $newImg.appendTo($picContainer);
+                // this.pGrid.append(foo);
 
                 // console.log('html clone ' + JSON.stringify(htmlClone));
                 // console.log('string clone ' + stringClone);
@@ -14450,7 +14466,9 @@ var Display = function (_SaveInput) {
             //    }
             //   that.pGrid.append($picContainer);
             // });
-        }
+        } //displayEls end
+
+
         // shuffle arrays
 
     }, {

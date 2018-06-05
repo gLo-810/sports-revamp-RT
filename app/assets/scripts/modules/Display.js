@@ -34,7 +34,6 @@ class Display extends SaveInput {
         console.log('fail');
     });
 
-
   }
 
   buttons (){
@@ -55,21 +54,44 @@ class Display extends SaveInput {
 
   //display images with names
   displayEls() {
-    // let that = this;
-    let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
+    let that = this;
+    // let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
+    // clone pic-grid-container
+
+    this.names.forEach(function(name, i) {
+
     let $picContainer = $('<div class="picture-frame"></div>');
     let  $newImg = $('<img>');
+    let  $newName = $('<p>');
 
-    // clone pic-grid-container
-    let htmlClone = this.pGrid.clone();
+
+
+    // append to DOM
+      $newImg.appendTo($picContainer);
+      $newName.text(name);
+      $newName.appendTo($picContainer);
+
+      if (baseball.checked) {
+           $newImg.attr('src', "./assets/images/baseball/team" + that.numbers[i] + ".jpg");
+         } else if (football.checked) {
+           $newImg.attr('src', "./assets/images/football/team" + that.numbers[i] + ".gif");
+       }
+      that.pGrid.append($picContainer);
+
+    });
+
+    let htmlClone = that.pGrid.clone();
     let stringClone = htmlClone.html();
+    console.log(stringClone);
 
     // EMIT
 
     //send image url
     socket.emit('client-image', {
-      image: img
+      image: stringClone
     });
+
+
 
     // send dom clone to server
     if (stringClone != 'null') {
@@ -78,23 +100,25 @@ class Display extends SaveInput {
       });
     }
 
-
     // LISTEN
 
     // append image in real time
     socket.on('client-image', (data) => {
 
         let foo = data.image.toString();
-
-        $newImg.attr('src', foo);
-        // console.log(data);
-        // console.log(foo);
-        $newImg.appendTo($picContainer);
-        this.pGrid.append($picContainer);
+        //
+        // $newImg.attr('src', foo);
+        // // console.log(data);
+        console.log('FOO ', foo);
+        // $newImg.appendTo($picContainer);
+        // this.pGrid.append(foo);
 
         // console.log('html clone ' + JSON.stringify(htmlClone));
         // console.log('string clone ' + stringClone);
     });
+
+
+
 
     // // clear content to start fresh
     // let that = this;
@@ -117,7 +141,10 @@ class Display extends SaveInput {
     //    }
     //   that.pGrid.append($picContainer);
     // });
-  }
+
+  }  //displayEls end
+
+
   // shuffle arrays
   shuffle(a) {
     for (let i = a.length; i; i--) {
