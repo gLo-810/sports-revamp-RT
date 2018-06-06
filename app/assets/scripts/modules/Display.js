@@ -43,6 +43,7 @@ class Display extends SaveInput {
 
     this.reset.click( () => {
        this.pGrid.html("");
+
     });
 
     this.random.click(() => {
@@ -82,7 +83,7 @@ class Display extends SaveInput {
 
     let htmlClone = that.pGrid.clone();
     let stringClone = htmlClone.html();
-    console.log(stringClone);
+    // console.log(stringClone);
 
     // EMIT
 
@@ -109,9 +110,9 @@ class Display extends SaveInput {
         //
         // $newImg.attr('src', foo);
         // // console.log(data);
-        console.log('FOO ', foo);
+        // console.log('client-image receive: ' + JSON.stringify(data));
         // $newImg.appendTo($picContainer);
-        // this.pGrid.append(foo);
+        this.pGrid.append(foo);
 
         // console.log('html clone ' + JSON.stringify(htmlClone));
         // console.log('string clone ' + stringClone);

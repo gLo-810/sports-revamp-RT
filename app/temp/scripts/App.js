@@ -14387,6 +14387,8 @@ var Display = function (_SaveInput) {
     }, {
         key: 'displayEls',
         value: function displayEls() {
+            var _this3 = this;
+
             var that = this;
             // let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
             // clone pic-grid-container
@@ -14412,7 +14414,7 @@ var Display = function (_SaveInput) {
 
             var htmlClone = that.pGrid.clone();
             var stringClone = htmlClone.html();
-            console.log(stringClone);
+            // console.log(stringClone);
 
             // EMIT
 
@@ -14437,9 +14439,9 @@ var Display = function (_SaveInput) {
                 //
                 // $newImg.attr('src', foo);
                 // // console.log(data);
-                console.log('FOO ', foo);
+                // console.log('client-image receive: ' + JSON.stringify(data));
                 // $newImg.appendTo($picContainer);
-                // this.pGrid.append(foo);
+                _this3.pGrid.append(foo);
 
                 // console.log('html clone ' + JSON.stringify(htmlClone));
                 // console.log('string clone ' + stringClone);

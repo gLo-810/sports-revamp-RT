@@ -33,6 +33,9 @@ io.on('connection', (socket) => {
 
 
     socket.on('new-client-append', function(data){
+            if (data === ''){
+              jqueryImage = '';
+            }
             jqueryImage = data.clone;
             console.log('jqueryImage ' + JSON.stringify(jqueryImage));
       });
