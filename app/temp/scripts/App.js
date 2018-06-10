@@ -14303,7 +14303,7 @@ var display = new _Display2.default();
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14329,163 +14329,184 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // make connection
-var socket = _socket2.default.connect('localhost:3000');
+var socket = _socket2.default.connect('http://localhost:3000');
 
 var Display = function (_SaveInput) {
-    _inherits(Display, _SaveInput);
+  _inherits(Display, _SaveInput);
 
-    // dom selection usually and firing events when a page loads.
-    function Display(names, numbers) {
-        _classCallCheck(this, Display);
+  // dom selection usually and firing events when a page loads.
+  function Display(names, numbers) {
+    _classCallCheck(this, Display);
 
-        var _this = _possibleConstructorReturn(this, (Display.__proto__ || Object.getPrototypeOf(Display)).call(this, names, numbers));
+    var _this = _possibleConstructorReturn(this, (Display.__proto__ || Object.getPrototypeOf(Display)).call(this, names, numbers));
 
-        _this.mainContainer = (0, _jquery2.default)('.main-container');
-        _this.pGrid = (0, _jquery2.default)('.pic-grid-container');
-        _this.baseball = (0, _jquery2.default)('#baseball');
-        _this.football = (0, _jquery2.default)('#football');
-        _this.display = (0, _jquery2.default)('#btn-display');
-        _this.reset = (0, _jquery2.default)('#btn-reset');
-        _this.random = (0, _jquery2.default)('#random');
-        _this.buttons();
+    _this.mainContainer = (0, _jquery2.default)('.main-container');
+    _this.pGrid = (0, _jquery2.default)('.pic-grid-container');
+    _this.baseball = (0, _jquery2.default)('#baseball');
+    _this.football = (0, _jquery2.default)('#football');
+    _this.display = (0, _jquery2.default)('#btn-display');
+    _this.resetBtn = (0, _jquery2.default)('#btn-reset');
+    _this.randomBtn = (0, _jquery2.default)('#random');
+    _this.htmlClone;
+    _this.stringClone;
+    _this.buttons();
+    _this.socketEvents();
 
-        socket.on('new-client-append', function (data) {
-            console.log('NEW CLIENT ENTERED');
-            console.log('new-client-append data ' + JSON.stringify(data));
+    return _this;
+  }
 
-            _this.pGrid.append(data);
-        });
+  _createClass(Display, [{
+    key: 'buttons',
+    value: function buttons() {
+      var _this2 = this;
 
-        socket.on('connect_error', function () {
-            console.log('fail');
-        });
+      // display content
+      this.display.click(this.displayEls.bind(this));
 
-        return _this;
+      // clear content
+      this.resetBtn.click(function () {
+        _this2.reset();
+      });
+
+      // auto random 5 times
+      this.randomBtn.click(function () {
+
+        var counter = 0;
+
+        var autoRandom = setInterval(function () {
+          counter += 1;
+          _this2.random();
+
+          if (counter === 5) {
+            clearInterval(autoRandom);
+          }
+        }, 1700);
+      });
+    } // end buttons method
+
+
+  }, {
+    key: 'socketEvents',
+    value: function socketEvents() {
+      var _this3 = this;
+
+      // LISTEN
+
+      socket.on('new-client-append', function (data) {
+        console.log('this client has entered...');
+        console.log('new-client-append data ' + JSON.stringify(data));
+
+        _this3.pGrid.append(data);
+      });
+
+      socket.on('connect_error', function () {
+        console.log('fail');
+      });
+
+      var foo = void 0;
+      // append image in real time
+      socket.on('client-real-time', function (data) {
+
+        foo = data.image;
+        //
+        // $newImg.attr('src', foo);
+        // console.log('CLIENT-IMAGE ' + foo);
+        console.log('client-real-time: ' + JSON.stringify(data.image));
+        // $newImg.appendTo($picContainer);
+        _this3.pGrid.append(foo);
+
+        // console.log('html clone ' + JSON.stringify(htmlClone));
+        // console.log('string clone ' + this.stringClone);
+      });
+
+      socket.on('reset', function (data) {
+        console.log('***CLIENT RESET***');
+        _this3.pGrid.html("");
+      });
     }
 
-    _createClass(Display, [{
-        key: 'buttons',
-        value: function buttons() {
-            var _this2 = this;
+    //display images with names
 
-            // click buttons
-            this.display.click(this.displayEls.bind(this));
+  }, {
+    key: 'displayEls',
+    value: function displayEls() {
+      var _this4 = this;
 
-            this.reset.click(function () {
-                _this2.pGrid.html("");
-            });
+      this.reset();
 
-            this.random.click(function () {
-                _this2.shuffle(_this2.names);
-                _this2.shuffle(_this2.numbers);
-                _this2.displayEls();
-            });
+      this.names.forEach(function (name, i) {
+
+        var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
+        var $newImg = (0, _jquery2.default)('<img>');
+        var $newName = (0, _jquery2.default)('<p>');
+
+        // append to DOM
+        $newImg.appendTo($picContainer);
+        $newName.text(name);
+        $newName.appendTo($picContainer);
+
+        if (baseball.checked) {
+          $newImg.attr('src', "./assets/images/baseball/team" + _this4.numbers[i] + ".jpg");
+        } else if (football.checked) {
+          $newImg.attr('src', "./assets/images/football/team" + _this4.numbers[i] + ".gif");
         }
+        _this4.pGrid.append($picContainer);
+      });
 
-        //display images with names
+      this.htmlClone = this.pGrid.clone();
+      this.stringClone = this.htmlClone.html();
+      // console.log(this.stringClone);
 
-    }, {
-        key: 'displayEls',
-        value: function displayEls() {
-            var _this3 = this;
+      // EMIT
 
-            var that = this;
-            // let img = 'https://secure.gravatar.com/avatar/22f38e0216f57af53a1776fb2a72c436?s=60&d=wavatar&r=g';
-            // clone pic-grid-container
+      // send dom clone to server
+      if (this.stringClone != 'null') {
+        //update all clients real time
 
-            this.names.forEach(function (name, i) {
+        socket.emit('client-real-time', {
+          image: this.stringClone
+        });
 
-                var $picContainer = (0, _jquery2.default)('<div class="picture-frame"></div>');
-                var $newImg = (0, _jquery2.default)('<img>');
-                var $newName = (0, _jquery2.default)('<p>');
+        socket.emit('new-client-append', {
+          clone: this.stringClone
+        });
+      };
+    } //displayEls end
 
-                // append to DOM
-                $newImg.appendTo($picContainer);
-                $newName.text(name);
-                $newName.appendTo($picContainer);
+  }, {
+    key: 'reset',
+    value: function reset() {
 
-                if (baseball.checked) {
-                    $newImg.attr('src', "./assets/images/baseball/team" + that.numbers[i] + ".jpg");
-                } else if (football.checked) {
-                    $newImg.attr('src', "./assets/images/football/team" + that.numbers[i] + ".gif");
-                }
-                that.pGrid.append($picContainer);
-            });
+      this.pGrid.html("");
+      this.stringClone = "";
 
-            var htmlClone = that.pGrid.clone();
-            var stringClone = htmlClone.html();
-            // console.log(stringClone);
+      socket.emit('reset', {
+        clear: this.stringClone
+      });
+    }
+  }, {
+    key: 'random',
+    value: function random() {
+      this.shuffle(this.names);
+      this.shuffle(this.numbers);
+      this.displayEls();
+    }
 
-            // EMIT
+    // shuffle arrays
 
-            //send image url
-            socket.emit('client-image', {
-                image: stringClone
-            });
+  }, {
+    key: 'shuffle',
+    value: function shuffle(a) {
+      for (var i = a.length; i; i--) {
+        var j = Math.floor(Math.random() * i);
+        var _ref = [a[j], a[i - 1]];
+        a[i - 1] = _ref[0];
+        a[j] = _ref[1];
+      }
+    }
+  }]);
 
-            // send dom clone to server
-            if (stringClone != 'null') {
-                socket.emit('new-client-append', {
-                    clone: stringClone
-                });
-            }
-
-            // LISTEN
-
-            // append image in real time
-            socket.on('client-image', function (data) {
-
-                var foo = data.image.toString();
-                //
-                // $newImg.attr('src', foo);
-                // // console.log(data);
-                // console.log('client-image receive: ' + JSON.stringify(data));
-                // $newImg.appendTo($picContainer);
-                _this3.pGrid.append(foo);
-
-                // console.log('html clone ' + JSON.stringify(htmlClone));
-                // console.log('string clone ' + stringClone);
-            });
-
-            // // clear content to start fresh
-            // let that = this;
-            // this.pGrid.html("");
-            // this.names.forEach(function(name, i) {
-            //
-            // let $picContainer = $('<div class="picture-frame"></div>');
-            // let  $newImg = $('<img>');
-            // let  $newName = $('<p>');
-            //
-            // // append to DOM
-            //   $newImg.appendTo($picContainer);
-            //   $newName.text(name);
-            //   $newName.appendTo($picContainer);
-            //
-            //   if (baseball.checked) {
-            //        $newImg.attr('src', "./assets/images/baseball/team" + that.numbers[i] + ".jpg");
-            //      } else if (football.checked) {
-            //        $newImg.attr('src', "./assets/images/football/team" + that.numbers[i] + ".gif");
-            //    }
-            //   that.pGrid.append($picContainer);
-            // });
-        } //displayEls end
-
-
-        // shuffle arrays
-
-    }, {
-        key: 'shuffle',
-        value: function shuffle(a) {
-            for (var i = a.length; i; i--) {
-                var j = Math.floor(Math.random() * i);
-                var _ref = [a[j], a[i - 1]];
-                a[i - 1] = _ref[0];
-                a[j] = _ref[1];
-            }
-        }
-    }]);
-
-    return Display;
+  return Display;
 }(_SaveInput3.default);
 
 exports.default = Display;

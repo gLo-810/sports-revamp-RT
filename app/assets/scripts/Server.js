@@ -15,30 +15,42 @@ app.use(express.static('app'));
 // socket setup & pass SERVER
 const io = new socketIO(server);
 
-let jqueryImage;
+
+let domClone;
 
 // on client connect
 io.on('connection', (socket) => {
 
+
+
+
   console.log('client has entered...');
 
-  socket.emit('new-client-append', jqueryImage);
+
+  socket.on('new-client-append', function(data){
+            domClone = data;
+            console.log('***NEW-CLIENT-APPEND***' + JSON.stringify(domClone));
+    });
+
+    socket.emit('new-client-append', domClone);
+
 
 
     // events
-    socket.on('client-image', (data) => {
-        console.log('SERVER ' + data.image);
-        socket.broadcast.emit('client-image', data);
-    });
 
-
-    socket.on('new-client-append', function(data){
-            if (data === ''){
-              jqueryImage = '';
-            }
-            jqueryImage = data.clone;
-            console.log('jqueryImage ' + JSON.stringify(jqueryImage));
+      socket.on('client-real-time', (data) => {
+        // setTimeout(() => {
+          io.sockets.emit('client-real-time', data);
+          console.log('***CLIENT-REAL-TIME***' + data.image + '**************');
+        // }, 2000);
       });
+
+      socket.on('reset', (data) => {
+        domClone = "";
+        console.log('***RESET***' + JSON.stringify(data.clear));
+        io.sockets.emit('reset', data);
+      });
+
 
 
 
